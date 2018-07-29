@@ -30,9 +30,9 @@ function done_check()
 end
 
 previous_score = 0
-death_score = -1.0 * math.log(10000)
-clip_min = -15
-clip_max = 15
+death_score = -750
+clip_min = -1000
+clip_max = 1000
 
 function correct_score ()
   local delta = 0
@@ -50,17 +50,13 @@ function correct_score ()
 
     if current_score > previous_score then
       delta = current_score - previous_score
-      
       previous_score = current_score
       if delta == 50 then
         delta = 0 --no reward for wall bounces
-      else
-        delta = math.log(1+delta)
       end
     elseif previous_score - current_score > 500000 then
       --not sure what happens when you get over 1,000,000. if it resets then this catches it
       delta = 1000000 - previous_score + current_score
-      delta = math.log(1+delta)
       previous_score = current_score
     end
   end

@@ -3,7 +3,7 @@
     "script": "lua:done_check"
   },
   "reward": {
-    "script": "lua:correct_bubbles"
+    "script": "lua:correct_score"
   },
   "scripts": [
     "script.lua"

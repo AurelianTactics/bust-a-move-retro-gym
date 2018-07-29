@@ -19,6 +19,14 @@
     "score_man": {
       "address":8259928,
       "type": "<u4"
+    },
+    "arrow": {
+      "address":8259774,
+      "type": "|u1"
+    },
+    "ready_to_fire": {
+      "address":8259912,
+      "type": "<u2"
     }
   }
 }
