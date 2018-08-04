@@ -28,7 +28,7 @@ end
 
 
 prev_score = 0
-death_score = -1.0 * math.log(500)
+death_score = -1.0 * math.log(10000)
 level_clear_bonus = math.log(100000)
 clip_min = -15
 clip_max = 15
@@ -59,22 +59,27 @@ end
 
 x_scroll_pos = 127 --player x position that enables level to scroll
 x_scroll_constant = 1 --value that tells screen is scrollable
-scroll_reward = math.log(100)
+scroll_reward = math.log(10)
 scroll_multiplier = 0.0 --penalty for if level is scrollable and player is not progressing in level
-existence_penalty = -1.0 * math.log(1.001) --life is suffering
+existence_penalty = -1.0 * math.log(1.01) --life is suffering
+prev_scroll_value = 0
 
 function scrollable_adjustment(r)
-
+  
   if data.is_scrollable == x_scroll_constant then
-    if data.x1 == x_scroll_pos then
+    if data.scroll_value ~= prev_scroll_value then
+      prev_scroll_value = data.scroll_value
       r = r + scroll_reward
     else
-      
-      local distance_penalty = -1 * math.log(1 + math.abs(x_scroll_pos-data.x1)/127.0) 
+      --user position >= 127 to scroll
+      local distance_penalty = 0.
+      --if data.x1 < x_scroll_pos then
+      --  distance_penalty = -1 * math.log(1 + math.abs(x_scroll_pos-data.x1)/127.0) 
+      --end
       r = r * scroll_multiplier + distance_penalty
     end
   else
-    r = r + existence_penalty
+    r = r --+ existence_penalty
   end
   return r
 end
