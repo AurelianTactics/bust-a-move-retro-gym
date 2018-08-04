@@ -52,7 +52,7 @@ function correct_score()
     end
     delta = scrollable_adjustment(delta)
   end
-
+  
   delta = clip(delta, clip_min, clip_max)
   return delta
 end
@@ -64,17 +64,18 @@ scroll_multiplier = 0.0 --penalty for if level is scrollable and player is not p
 existence_penalty = -1.0 * math.log(1.001) --life is suffering
 
 function scrollable_adjustment(r)
+
   if data.is_scrollable == x_scroll_constant then
     if data.x1 == x_scroll_pos then
       r = r + scroll_reward
-      return r
     else
+      
       local distance_penalty = -1 * math.log(1 + math.abs(x_scroll_pos-data.x1)/127.0) 
       r = r * scroll_multiplier + distance_penalty
-      return r
     end
   else
     r = r + existence_penalty
   end
+  return r
 end
 
