@@ -1,0 +1,56 @@
+{
+  "info": {
+    "lives": {
+      "address": 8265610,
+      "type": "|u1"
+    },
+    "weapon1": {
+      "address": 8265604,
+      "type": "|u1"
+    },
+    "weapon2": {
+      "address": 8265606,
+      "type": "|u1"
+    },
+    "active": {
+      "address": 8258070,
+      "type": "|u1"
+    },
+    "x1": {
+      "address": 8258054,
+      "type": "|u1"
+    },
+    "x2": {
+      "address": 8258088,
+      "type": "|u1"
+    },
+    "y1": {
+      "address": 8258064,
+      "type": "|u1"
+    },
+    "y2": {
+      "address": 8258090,
+      "type": "|u1"
+    },
+    "xoffset": {
+      "address": 8258089,
+      "type": "|u1"
+    },
+    "yoffset": {
+      "address": 8258091,
+      "type": "|u1"
+    },
+    "score": {
+      "address": 8265632,
+      "type": "<u2"
+    },
+    "level": {
+      "address": 8257670,
+      "type": "|u1"
+    },
+    "is_scrollable": {
+      "address": 8262586,
+      "type": "|u1"
+    }
+  }
+}
