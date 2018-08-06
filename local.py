@@ -2,6 +2,7 @@ import retro
 import retro_contest
 import gym
 import os
+import time
 
 
 def make(game, state=retro.State.DEFAULT, discrete_actions=False, bk2dir=None,monitordir=None, scenario='scenario'):
@@ -17,10 +18,16 @@ def make(game, state=retro.State.DEFAULT, discrete_actions=False, bk2dir=None,mo
         env.auto_record(bk2dir)
     #added this
     if monitordir:
-        env = retro_contest.Monitor(env, os.path.join(monitordir, 'monitor.csv'), os.path.join(monitordir, 'log.csv'))
-    env = retro_contest.StochasticFrameSkip(env, n=16, stickprob=0.0)
+        time_int = int(time.time())
+        env = retro_contest.Monitor(env, os.path.join(monitordir, 'monitor_{}.csv'.format(time_int)),
+                                    os.path.join(monitordir, 'log_{}.csv'.format(time_int)))
+    #bust a move
+    #env = retro_contest.StochasticFrameSkip(env, n=6, stickprob=0.0) #n=10, did some analysis on this
+    #contra
+    env = retro_contest.StochasticFrameSkip(env, n=4, stickprob=0.0)
+    #sonic
     #env = retro_contest.StochasticFrameSkip(env, n=4, stickprob=0.25)
-    #env = gym.wrappers.TimeLimit(env, max_episode_steps=4500)
+    env = gym.wrappers.TimeLimit(env, max_episode_steps=8000)
     #env.serve(timestep_limit=10000, ignore_reset=True)
     return env
 

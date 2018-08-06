@@ -15,8 +15,10 @@ def make_env(stack=True, scale_rew=True, scenario = 'scenario'): #scenario =  #'
     """
     #env = grc.RemoteEnv('tmp/sock')
     #env = make(game='SonicTheHedgehog-Genesis', state='SpringYardZone.Act1', bk2dir='videos', monitordir='logs',scenario=scenario)
-#'BustAMove.1pplay.Level1'
-    env = make(game='BustAMove-Snes', state='BustAMove.Challengeplay0', bk2dir='videos', monitordir='logs',scenario=scenario)
+#'BustAMove.1pplay.Level1' #BustAMove.Challengeplay0
+    #env = make(game='BustAMove-Snes', state='BustAMove.1pplay.Level1', bk2dir='videos', monitordir='logs',scenario=scenario)
+    env = make(game='ContraIII-Snes', state='level1.1player.easy.100lives', bk2dir='videos', monitordir='logs',
+               scenario=scenario)
 
     env = SonicDiscretizer(env)
     if scale_rew:
@@ -33,8 +35,28 @@ class SonicDiscretizer(gym.ActionWrapper):
     """
     def __init__(self, env):
         super(SonicDiscretizer, self).__init__(env)
+        #SNES keys
         buttons = ["B", "Y", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "A", "X", "L", "R"]
-        actions = [['LEFT'], ['RIGHT'], ['NOOP'], ['B']]
+        #bust a move keys
+        #actions = [['LEFT'], ['RIGHT'], ['B'], ['L'], ['R']]
+        #Contra 3 keys side scrolling levels
+        #level 1
+        actions = [['Y'],['A'],['Y','LEFT'],['Y','RIGHT'],['Y','X'],['Y','B','LEFT'],['Y','B','RIGHT'],
+                   ['Y','UP','LEFT'],['Y','UP','RIGHT'],['Y','DOWN','LEFT'],['Y','DOWN','RIGHT'],
+                   ['Y', 'DOWN'],['Y','L','R','RIGHT'],['Y','L','R','LEFT']]
+        #level 3,4,6
+        # actions = [['Y'], ['A'], ['Y', 'LEFT'], ['Y', 'RIGHT'], ['Y', 'X'], ['Y', 'B', 'LEFT'], ['Y', 'B', 'RIGHT'],
+        #            ['Y', 'UP', 'LEFT'], ['Y', 'UP', 'RIGHT'], ['Y', 'DOWN', 'LEFT'], ['Y', 'DOWN', 'RIGHT'],
+        #            ['Y', 'DOWN'], ['Y', 'L', 'R', 'RIGHT'], ['Y', 'L', 'R', 'LEFT'],
+        #            ['Y', 'R', 'UP', 'LEFT'], ['Y', 'R', 'UP', 'RIGHT'], ['Y', 'R', 'DOWN', 'LEFT'],
+        #            ['Y', 'R', 'DOWN', 'RIGHT'],['UP'],['RIGHT'],['Y','DOWN'],['Y','UP']]
+
+        # actions = [['Y','LEFT'],['Y','RIGHT'],['Y','X'],['Y','B','LEFT'],['Y','B','RIGHT'],
+        #            ['Y','UP','LEFT'],['Y','UP','RIGHT'],['Y','DOWN','LEFT'],['Y','DOWN','RIGHT'],
+        #            ['Y', 'DOWN']]
+                    #due to cheesing the scrolling part, can't do R actions and up/down
+                    #['Y', 'UP'], ['Y', 'DOWN'],['Y','B'],['Y','X'],['Y','B','DOWN'],
+                   #['Y','R','UP','LEFT'],['Y','R','UP','RIGHT'],['Y','R','DOWN','LEFT'],['Y','R','DOWN','RIGHT']]
         self._actions = []
         for action in actions:
             arr = np.array([False] * 12)
@@ -57,6 +79,12 @@ class RewardScaler(gym.RewardWrapper):
     drastically.
     """
     def reward(self, reward):
+        #sonic rewards generally in the low -5 to 5 range, hundreds bonus at level end
+        #return reward * 0.01
+        #bust a move (for score) in the 30 to 100 range for score (in general, many in high hundres low thouands).
+            # thousands/tenthousands bonus at lvl end
+        #bust a move for bubbles is fine with 0.01
+        #return reward * 0.0005
         return reward * 0.01
 
 class AllowBacktracking(gym.Wrapper):
