@@ -16,10 +16,14 @@ function done_check()
     return true
   end
 
-  if data.lives > prev_lives then
-    prev_lives = data.lives
-  elseif data.lives < prev_lives then
+  --if data.lives > prev_lives then
+  --  prev_lives = data.lives
+  --elseif data.lives < prev_lives then
     --potential issue if you gain a life as you lose a life
+  --  return true
+  --end
+
+  if data.lives <= 0 then
     return true
   end
 
@@ -58,11 +62,13 @@ function correct_score()
 end
 
 x_scroll_pos = 127 --player x position that enables level to scroll
-x_scroll_constant = 1 --value that tells screen is scrollable
+x_scroll_constant = 1 --value that tells screen is horizontal scrollable
+y_scroll_constant = 3 --value that tells screen is vert scrollable
 scroll_reward = math.log(10)
 scroll_multiplier = 0.0 --penalty for if level is scrollable and player is not progressing in level
 existence_penalty = -1.0 * math.log(1.01) --life is suffering
 prev_scroll_value = 0
+prev_vert_scroll_value = 0
 
 function scrollable_adjustment(r)
   
@@ -76,7 +82,15 @@ function scrollable_adjustment(r)
       --if data.x1 < x_scroll_pos then
       --  distance_penalty = -1 * math.log(1 + math.abs(x_scroll_pos-data.x1)/127.0) 
       --end
-      r = r * scroll_multiplier + distance_penalty
+      r = r * scroll_multiplier --+ distance_penalty
+    end
+  elseif data.is_scrollable == y_scroll_constant then
+    if data.vert_scroll_value ~= prev_vert_scroll_value then
+      --user data.x1 < 89 then goes up (but toggles between 89 and 90 as it goes up)
+      prev_vert_scroll_value = data.vert_scroll_value
+      r = r + scroll_reward
+    else
+      r = r * scroll_multiplier
     end
   else
     r = r --+ existence_penalty

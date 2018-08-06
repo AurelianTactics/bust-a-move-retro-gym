@@ -51,6 +51,14 @@
     "is_scrollable": {
       "address": 8262586,
       "type": "|u1"
+    },
+    "scroll_value": {
+      "address": 8262538,
+      "type": "|u1"
+    },
+    "vert_scroll_value": {
+      "address": 8262552,
+      "type": "|u1"
     }
   }
 }
