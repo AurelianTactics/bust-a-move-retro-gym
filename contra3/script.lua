@@ -36,16 +36,24 @@ death_score = -1.0 * math.log(10000)
 level_clear_bonus = math.log(100000)
 clip_min = -15
 clip_max = 15
+prev_lives_for_score = data.lives
+death_frames_penalty = 10
+death_frames_iter = 0
 
 function correct_score()
   local delta = 0
+
   if done_check() then
     if level ~= data.level then
       delta = delta + level_clear_bonus
     else
-      --penalty for dieing
+      --penalty for game over
       delta = delta + death_score
     end
+  elseif data.lives < prev_lives_for_score then
+    prev_lives_for_score = data.lives
+    delta = delta + death_score
+    death_frames_iter = death_frames_penalty
   else
     if data.score > prev_score then
       delta = delta + math.log(1+data.score-prev_score)
@@ -57,6 +65,12 @@ function correct_score()
     delta = scrollable_adjustment(delta)
   end
   
+  --penalty for death lasts for death_frames_penalty frames
+  if death_frames_iter > 0 then
+    death_frames_iter = death_frames_iter - 1
+    delta = delta + death_score
+  end
+
   delta = clip(delta, clip_min, clip_max)
   return delta
 end
